@@ -2,23 +2,49 @@
         <html>
         <head>
         <style>
-        #particles{
+        svg{
             background-color: #000000;
         }
         </style>
         </head> 
         
         <body> 
-            <script type="text/javascript"> 
-                var jsonfile = "particles.json",
-                    fps = 60,
-                    width = 960,
-                    height = 540;
-                
-                function ready(c) {
-                    c.play();
-                }
+    <script src="./SnapSVGAnimator/js/vendor/snap.svg/snap.svg-min.js"></script>
+    <script src="./SnapSVGAnimator/js/SnapSVGAnimator.min.js"></script>
+
+    <script type="text/javascript"> 
+        var jsonfile = "particles.json",
+            fps = 60,
+            width = 960,
+            height = 540,
+            AJAX_req;
+
+    AJAX_JSON_Req(jsonfile);
+
+    function handle_AJAX_Complete() {
+        if( AJAX_req.readyState == 4 && AJAX_req.status == 200 )
+        {
+            json = JSON.parse(AJAX_req.responseText);
+            comp = new SVGAnim(
+                           json,
+                           width,
+                           height,
+                           fps
+                           );
+            
+        }
+    }
+
+    function AJAX_JSON_Req( url )
+    {
+        AJAX_req = new XMLHttpRequest();
+        AJAX_req.open("GET", url, true);
+        AJAX_req.setRequestHeader("Content-type", "application/json");
+        
+        AJAX_req.onreadystatechange = handle_AJAX_Complete;
+        AJAX_req.send();
+    }
+
             </script>
-            <script src="./SnapRuntime/js/vendor/requirejs/require.js" data-main="SnapRuntime/js/main"></script> 
         </body>
         </html>
